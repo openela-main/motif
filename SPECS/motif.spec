@@ -1,7 +1,7 @@
 Summary: Run-time libraries and programs
 Name: motif
 Version: 2.3.4
-Release: 19%{?dist}
+Release: 20%{?dist}
 License: LGPLv2+
 Group: System Environment/Libraries
 Source: http://downloads.sf.net/motif/motif-%{version}-src.tgz
@@ -40,6 +40,10 @@ Patch53: motifzone_1660.patch
 Patch54: motifzone_1612.patch
 
 Patch55: 0001-EditresCom-Fix-build-with-modern-systems.patch
+# CVE-2023-43788
+Patch56: 0001-Fix-CVE-2023-43788-Out-of-bounds-read-in-XpmCreateXp.patch
+# CVE-2023-43789
+Patch57: 0001-Fix-CVE-2023-43789-Out-of-bounds-read-on-XPM-with-co.patch
 
 Conflicts: lesstif <= 0.92.32-6
 
@@ -89,6 +93,8 @@ This package contains the static Motif libraries.
 %patch53 -p1 -b .motifzone_1660
 %patch54 -p1 -b .motifzone_1612
 %patch55 -p1 -b .long_bit
+%patch56 -p1 -b .cve-2023-43788
+%patch57 -p1 -b .cve-2023-43789
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64" \
@@ -146,6 +152,10 @@ rm -rf %{buildroot}
 %{_libdir}/lib*.a
 
 %changelog
+* Mon Nov 27 2023 José Expósito <jexposit@redhat.com> - 2.3.4-20
+- Fix CVE-2023-43788: out of bounds read in XpmCreateXpmImageFromBuffer()
+- Fix CVE-2023-43789: out of bounds read on XPM with corrupted colormap
+
 * Mon Sep 26 2022 Olivier Fourdan <ofourdan@redhat.com> - 2.3.4-19
 - Fix LONG_BIT definition missing (rhbz#2124810)
 
