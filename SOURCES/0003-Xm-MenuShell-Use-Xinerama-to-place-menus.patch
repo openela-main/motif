@@ -1,0 +1,119 @@
+From 10168aa7f16afb32e71d9e0a22fa8f90fb301bf4 Mon Sep 17 00:00:00 2001
+From: Olivier Fourdan <ofourdan@redhat.com>
+Date: Thu, 21 Nov 2024 11:52:22 +0100
+Subject: [PATCH 3/7] Xm/MenuShell: Use Xinerama to place menus
+
+Signed-off-by: Olivier Fourdan <ofourdan@redhat.com>
+---
+ lib/Xm/MenuShell.c | 34 +++++++++++++++++-----------------
+ 1 file changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/lib/Xm/MenuShell.c b/lib/Xm/MenuShell.c
+index 483cc95a..1dea4a54 100644
+--- a/lib/Xm/MenuShell.c
++++ b/lib/Xm/MenuShell.c
+@@ -41,6 +41,7 @@ static char rcsid[] = "$TOG: MenuShell.c /main/24 1999/07/08 16:49:59 vipin $"
+ #include <Xm/LabelP.h>
+ #include <Xm/LayoutT.h>
+ #include <Xm/MenuT.h>
++#include <Xm/ScreenP.h>
+ #include <Xm/SpecRenderT.h>
+ #include <Xm/TraitP.h>
+ #include <Xm/TransltnsP.h>
+@@ -913,7 +914,7 @@ ForceMenuPaneOnScreen(
+         register Position *y )
+ {
+    Position rightEdgeOfMenu, bottomEdgeOfMenu;
+-   Dimension dispWidth, dispHeight;
++   Position dispX, dispY, dispMaxX, dispMaxY;
+    Widget pulldown_button = RC_CascadeBtn(rowcol);
+    Dimension RowColBorderWidth = rowcol->core.border_width << 1;
+    Dimension CascadeBorderWidth = 0;
+@@ -925,8 +926,7 @@ ForceMenuPaneOnScreen(
+ 
+    rightEdgeOfMenu = *x + RowColBorderWidth + rowcol->core.width;
+    bottomEdgeOfMenu = *y + RowColBorderWidth + rowcol->core.height;
+-   dispWidth = WidthOfScreen (XtScreen(rowcol));
+-   dispHeight = HeightOfScreen (XtScreen(rowcol));
++   _XmScreenGetBoundariesAtpoint(XtScreen(rowcol), *x, *y, &dispX, &dispY, &dispMaxX, &dispMaxY);
+ 
+    /*
+     * For OPTION menus, if the submenu is [partially] offscreen, offset it
+@@ -937,9 +937,9 @@ ForceMenuPaneOnScreen(
+        (RC_Type(XtParent(pulldown_button)) == XmMENU_OPTION))
+    {
+       Position old_x = *x;
+-      if (bottomEdgeOfMenu >= (Position)dispHeight)
++      if (bottomEdgeOfMenu >= dispMaxY)
+       {
+-          *y = dispHeight - rowcol->core.height - RowColBorderWidth - 1;
++          *y = dispMaxY - rowcol->core.height - RowColBorderWidth - 1;
+           if (LayoutIsRtoLM(rowcol))
+              *x = old_x - rowcol->core.width - (rowcol->core.border_width <<1);
+           else
+@@ -948,9 +948,9 @@ ForceMenuPaneOnScreen(
+           bottomEdgeOfMenu = *y + RowColBorderWidth + rowcol->core.height;
+       }
+ 
+-      if (*y < 0)
++      if (*y < dispY)
+       {
+-          *y = 0;
++          *y = dispY;
+ 
+ 	  /* Consider CascadeBtn as well as RowCol width to allow multi
+ 	   * column RowColumn
+@@ -963,13 +963,13 @@ ForceMenuPaneOnScreen(
+           bottomEdgeOfMenu = *y + RowColBorderWidth + rowcol->core.height;
+       }
+ 
+-      if (rightEdgeOfMenu >= (Position)dispWidth)
++      if (rightEdgeOfMenu >= dispMaxX)
+       {
+ 	  *x = old_x - rowcol->core.width + RowColBorderWidth;
+ 	  rightEdgeOfMenu = *x + RowColBorderWidth + rowcol->core.width;
+       }
+ 
+-      if (*x < 0)
++      if (*x < dispX)
+       {
+           if (LayoutIsRtoLM(rowcol))
+              *x = old_x + pulldown_button->core.width + CascadeBorderWidth;
+@@ -982,10 +982,10 @@ ForceMenuPaneOnScreen(
+    /*
+     * If the submenu is offscreen force it completely on.
+     */
+-   if (rightEdgeOfMenu >= (Position)dispWidth)
+-       *x -= (rightEdgeOfMenu - dispWidth + 1);
++   if (rightEdgeOfMenu >= dispMaxX)
++       *x -= (rightEdgeOfMenu - dispMaxX + 1);
+ 
+-   if (bottomEdgeOfMenu >= (Position)dispHeight)
++   if (bottomEdgeOfMenu >= dispMaxY)
+    {
+       if (pulldown_button && XtParent(pulldown_button) &&
+ 	  (RC_Type(XtParent(pulldown_button)) == XmMENU_BAR))
+@@ -1005,15 +1005,15 @@ ForceMenuPaneOnScreen(
+ 	     *y = y_temp;
+       }
+       else
+-	  *y -= (bottomEdgeOfMenu - dispHeight + 1);
++	  *y -= (bottomEdgeOfMenu - dispMaxY + 1);
+    }
+ 
+    /* Make sure that the top left corner os on screen! */
+-   if (*x < 0)
+-       *x = 0;
++   if (*x < dispX)
++       *x = dispX;
+ 
+-   if (*y < 0)
+-       *y = 0;
++   if (*y < dispY)
++       *y = dispY;
+ }
+ 
+ /*
+-- 
+2.47.1
+

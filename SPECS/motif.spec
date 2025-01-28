@@ -1,7 +1,7 @@
 Summary: Run-time libraries and programs
 Name: motif
 Version: 2.3.4
-Release: 20%{?dist}
+Release: 21%{?dist}
 License: LGPLv2+
 Group: System Environment/Libraries
 Source: http://downloads.sf.net/motif/motif-%{version}-src.tgz
@@ -22,6 +22,7 @@ BuildRequires: libjpeg-devel libpng-devel
 BuildRequires: libXft-devel libXmu-devel libXp-devel libXt-devel libXext-devel
 BuildRequires: xorg-x11-xbitmaps
 BuildRequires: perl-interpreter
+BuildRequires: pkgconfig(xinerama)
 
 Patch22: motif-2.3.4-no_demos.patch
 Patch23: openMotif-2.2.3-uil_lib.patch
@@ -44,6 +45,16 @@ Patch55: 0001-EditresCom-Fix-build-with-modern-systems.patch
 Patch56: 0001-Fix-CVE-2023-43788-Out-of-bounds-read-in-XpmCreateXp.patch
 # CVE-2023-43789
 Patch57: 0001-Fix-CVE-2023-43789-Out-of-bounds-read-on-XPM-with-co.patch
+
+# https://issues.redhat.com/browse/RHEL-67987
+Patch58: 0001-build-Check-for-Xinerama-availability.patch
+Patch59: 0002-Xm-Display-Add-optional-Xinerama-support.patch
+Patch60: 0003-Xm-MenuShell-Use-Xinerama-to-place-menus.patch
+Patch61: 0004-Xm-DropDown-Use-Xinerama-for-placement.patch
+Patch62: 0005-Xm-RCMenu-Use-Xinerama-for-placement.patch
+Patch63: 0006-Xm-Tooltip-Use-Xinerama-for-placement.patch
+Patch64: 0007-Xm-ComboBox-Use-Xinerama-for-placement.patch
+
 
 Conflicts: lesstif <= 0.92.32-6
 
@@ -95,6 +106,13 @@ This package contains the static Motif libraries.
 %patch55 -p1 -b .long_bit
 %patch56 -p1 -b .cve-2023-43788
 %patch57 -p1 -b .cve-2023-43789
+%patch58 -p1 -b .xinerama
+%patch59 -p1 -b .xinerama
+%patch60 -p1 -b .xinerama
+%patch61 -p1 -b .xinerama
+%patch62 -p1 -b .xinerama
+%patch63 -p1 -b .xinerama
+%patch64 -p1 -b .xinerama
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64" \
@@ -152,6 +170,9 @@ rm -rf %{buildroot}
 %{_libdir}/lib*.a
 
 %changelog
+* Mon Nov 25 2024 Olivier Fourdan <ofourdan@redhat.com> - 2.3.4-21
+- Add Xinerama support (RHEL-67987)
+
 * Mon Nov 27 2023 José Expósito <jexposit@redhat.com> - 2.3.4-20
 - Fix CVE-2023-43788: out of bounds read in XpmCreateXpmImageFromBuffer()
 - Fix CVE-2023-43789: out of bounds read on XPM with corrupted colormap
