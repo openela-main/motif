@@ -1,4 +1,4 @@
-From 49791ea9aa84c64af114f564d4c46228263d1439 Mon Sep 17 00:00:00 2001
+From 3a164564cf8241ee4544ff012659e8eb510b195b Mon Sep 17 00:00:00 2001
 From: Olivier Fourdan <ofourdan@redhat.com>
 Date: Tue, 19 Nov 2024 18:40:33 +0100
 Subject: [PATCH 1/7] build: Check for Xinerama availability
@@ -57,5 +57,5 @@ index a95fa2db..07b733f5 100644
  noinst_HEADERS = BaseClassI.h \
  BitmapsI.h \
 -- 
-2.47.1
+2.49.0
 

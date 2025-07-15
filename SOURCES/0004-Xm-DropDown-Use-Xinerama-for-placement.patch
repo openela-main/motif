@@ -1,4 +1,4 @@
-From e21e7ffaa62df64be305326d24eca09c80129403 Mon Sep 17 00:00:00 2001
+From 0e834a8d37dfabd8fa4463f83c132478e50f8337 Mon Sep 17 00:00:00 2001
 From: Olivier Fourdan <ofourdan@redhat.com>
 Date: Thu, 21 Nov 2024 14:11:11 +0100
 Subject: [PATCH 4/7] Xm/DropDown: Use Xinerama for placement
@@ -61,5 +61,5 @@ index a25d1092..665e0e26 100644
      XtSetArg(args[num_args], XmNx, x); num_args++;
      XtSetArg(args[num_args], XmNy, y); num_args++;
 -- 
-2.47.1
+2.49.0
 

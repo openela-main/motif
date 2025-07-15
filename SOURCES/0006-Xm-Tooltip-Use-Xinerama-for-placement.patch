@@ -1,4 +1,4 @@
-From af453aebd8e53a32369c792cf8d0e641b2b3a834 Mon Sep 17 00:00:00 2001
+From f2bc91c789ed33fc1e0a31d167a6a7bc0383429e Mon Sep 17 00:00:00 2001
 From: Olivier Fourdan <ofourdan@redhat.com>
 Date: Thu, 21 Nov 2024 14:24:30 +0100
 Subject: [PATCH 6/7] Xm/Tooltip: Use Xinerama for placement
@@ -49,5 +49,5 @@ index dc65071d..fdd32221 100644
        destY = ry + (XmIsGadget (w) ? XtY (w) : 0) - y - geo.height;
     }
 -- 
-2.47.1
+2.49.0
 

@@ -1,4 +1,4 @@
-From d97abbe6cf64a8bb0e331725c36caf5e0ac37b0f Mon Sep 17 00:00:00 2001
+From 3ef8c038b06f136a6abe7cfa23afec4d514af4f0 Mon Sep 17 00:00:00 2001
 From: Olivier Fourdan <ofourdan@redhat.com>
 Date: Thu, 21 Nov 2024 14:17:21 +0100
 Subject: [PATCH 5/7] Xm/RCMenu: Use Xinerama for placement
@@ -66,5 +66,5 @@ index 2c698d4f..abd7a70e 100644
      }
  
 -- 
-2.47.1
+2.49.0
 

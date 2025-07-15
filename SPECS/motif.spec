@@ -1,7 +1,7 @@
 Summary: Run-time libraries and programs
 Name: motif
 Version: 2.3.4
-Release: 21%{?dist}
+Release: 23%{?dist}
 License: LGPLv2+
 Group: System Environment/Libraries
 Source: http://downloads.sf.net/motif/motif-%{version}-src.tgz
@@ -55,6 +55,8 @@ Patch62: 0005-Xm-RCMenu-Use-Xinerama-for-placement.patch
 Patch63: 0006-Xm-Tooltip-Use-Xinerama-for-placement.patch
 Patch64: 0007-Xm-ComboBox-Use-Xinerama-for-placement.patch
 
+# https://issues.redhat.com/browse/RHEL-96948
+Patch65: 0001-Xm-String-Fix-memory-leak.patch
 
 Conflicts: lesstif <= 0.92.32-6
 
@@ -113,6 +115,7 @@ This package contains the static Motif libraries.
 %patch62 -p1 -b .xinerama
 %patch63 -p1 -b .xinerama
 %patch64 -p1 -b .xinerama
+%patch65 -p1 -b .memleak
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64" \
@@ -170,6 +173,15 @@ rm -rf %{buildroot}
 %{_libdir}/lib*.a
 
 %changelog
+* Fri Jun 27 2025 Olivier Fourdan <ofourdan@redhat.com> - 2.3.4-23
+- Fix a memory leak with UTF-8 strings
+  Resolves: RHEL-96948
+
+* Mon Jun  2 2025 Olivier Fourdan <ofourdan@redhat.com> - 2.3.4-22
+- Keep drop-down menus on the same monitor as the pull-down button with
+  Xinerama
+  Resolves: RHEL-91951
+
 * Mon Nov 25 2024 Olivier Fourdan <ofourdan@redhat.com> - 2.3.4-21
 - Add Xinerama support (RHEL-67987)
 
