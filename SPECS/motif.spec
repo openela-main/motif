@@ -1,7 +1,7 @@
 Summary: Run-time libraries and programs
 Name: motif
 Version: 2.3.4
-Release: 23%{?dist}
+Release: 24%{?dist}
 License: LGPLv2+
 Group: System Environment/Libraries
 Source: http://downloads.sf.net/motif/motif-%{version}-src.tgz
@@ -54,9 +54,12 @@ Patch61: 0004-Xm-DropDown-Use-Xinerama-for-placement.patch
 Patch62: 0005-Xm-RCMenu-Use-Xinerama-for-placement.patch
 Patch63: 0006-Xm-Tooltip-Use-Xinerama-for-placement.patch
 Patch64: 0007-Xm-ComboBox-Use-Xinerama-for-placement.patch
-
 # https://issues.redhat.com/browse/RHEL-96948
 Patch65: 0001-Xm-String-Fix-memory-leak.patch
+# https://issues.redhat.com/browse/RHEL-97048
+# (see also https://issues.redhat.com/browse/RHEL-87743)
+Patch66: 0001-Xm-Screen-Add-_NET_WORKAREA-support.patch
+Patch67: 0002-Xm-Screen-Add-_GTK_WORKAREAS-support-for-multi-monit.patch
 
 Conflicts: lesstif <= 0.92.32-6
 
@@ -116,6 +119,8 @@ This package contains the static Motif libraries.
 %patch63 -p1 -b .xinerama
 %patch64 -p1 -b .xinerama
 %patch65 -p1 -b .memleak
+%patch66 -p1 -b .net_workarea
+%patch67 -p1 -b .gtk_workareas
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64" \
@@ -173,6 +178,10 @@ rm -rf %{buildroot}
 %{_libdir}/lib*.a
 
 %changelog
+* Fri Sep  5 2025 Olivier Fourdan <ofourdan@redhat.com> - 2.3.4-24
+- Add support for _NET_WORKAREA and _GTK_WORKAREAS
+  Resolves: RHEL-97048
+
 * Fri Jun 27 2025 Olivier Fourdan <ofourdan@redhat.com> - 2.3.4-23
 - Fix a memory leak with UTF-8 strings
   Resolves: RHEL-96948
