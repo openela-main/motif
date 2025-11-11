@@ -1,4 +1,4 @@
-From 011e62e69fb87e78a128487a043cc13b042bb8b5 Mon Sep 17 00:00:00 2001
+From f8aa9901f3cfa5fb49b809fdb223798623bede63 Mon Sep 17 00:00:00 2001
 From: Olivier Fourdan <ofourdan@redhat.com>
 Date: Wed, 20 Nov 2024 10:26:28 +0100
 Subject: [PATCH 2/7] Xm/Display: Add optional Xinerama support
@@ -415,5 +415,5 @@ index 8c0c4f9a..5887e7ad 100644
  #file XmStrDefsI.h
  #table _XmStringsI
 -- 
-2.47.1
+2.49.0
 
